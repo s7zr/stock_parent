@@ -42,6 +42,9 @@
         <spring-boot.version>2.5.3</spring-boot.version>
         <joda-time.version>2.10.5</joda-time.version>
         <google.guava.version>30.0-jre</google.guava.version>
+        <knif4j.version>2.0.2</knif4j.version>
+        <hutool.version>5.7.21</hutool.version>
+        <swagger.version>2.6.1</swagger.version>
     </properties>
     <!--定义依赖的版本，不负责依赖的引入，只负责版本的约定-->
     <dependencyManagement>
@@ -130,6 +133,31 @@
                 <artifactId>guava</artifactId>
                 <version>${google.guava.version}</version>
             </dependency>
+            <!--knife4j的依赖-->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knif4j.version}</version>
+            </dependency>
+            <!--hutool万能工具包-->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+<!--            swagger-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+<!--            swagger-ui支持类-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <build>

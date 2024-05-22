@@ -1,6 +1,11 @@
 package org.mmj.stock.mapper;
 
+import org.apache.ibatis.annotations.Param;
+import org.mmj.stock.pojo.domain.InnerMarketDomain;
 import org.mmj.stock.pojo.entity.StockMarketIndexInfo;
+
+import java.util.Date;
+import java.util.List;
 
 /**
 * @author mmj
@@ -22,4 +27,5 @@ public interface StockMarketIndexInfoMapper {
 
     int updateByPrimaryKey(StockMarketIndexInfo record);
 
+    List<InnerMarketDomain> getInnerIndexByTimeAndCodes(@Param("dateTime") Date dateTime, @Param("innerCodes") List<String> innerCodes);
 }
