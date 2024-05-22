@@ -3,6 +3,8 @@ package org.mmj.stock.mapper;
 import org.apache.ibatis.annotations.Param;
 import org.mmj.stock.pojo.entity.SysUser;
 
+import java.util.List;
+
 /**
 * @author mmj
 * @description 针对表【sys_user(用户表)】的数据库操作Mapper
@@ -29,5 +31,12 @@ public interface SysUserMapper {
      * @return
      */
     SysUser getUserByUserName(@Param("userName") String userName);
+
+    /**
+     * 查询所有用户信息
+     * @return
+     */
+    List<SysUser> findAll();
+
 
 }

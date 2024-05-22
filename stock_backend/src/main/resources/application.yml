@@ -30,4 +30,4 @@ mybatis:
 # 设置分页
 pagehelper:
   helper-dialect: mysql #指定分页数据库类型（方言）
-  reasonable: true #合理查询超过最大页，则查询最后一页
+  reasonable: true #合理查询超过最大页，则查询最后一页，如果查询-1页则查询第一页
