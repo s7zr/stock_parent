@@ -1,6 +1,8 @@
 package org.mmj.stock.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.mmj.stock.pojo.domain.Stock4EvrDayDomain;
+import org.mmj.stock.pojo.domain.Stock4MinuteDomain;
 import org.mmj.stock.pojo.domain.StockUpdownDomain;
 import org.mmj.stock.pojo.entity.StockRtInfo;
 
@@ -43,4 +45,33 @@ public interface StockRtInfoMapper {
      * @return
      */
     List<Map> getStockUpdownCount(@Param("openTime") Date openTime, @Param("curTime") Date curTime, @Param("flag") int flag);
+
+    /**
+     * 统计指定时间点下，各个涨跌区间内股票的个数
+     * @param avlDate
+     * @return
+     */
+    List<Map> getStockUpDownSectionByTime(@Param("avlDate") Date avlDate);
+
+    /**
+     * 根据时间范围查询指定股票的交易流水
+     * @param stockCode 股票code
+     * @param startTime 起始时间
+     * @param endTime 终止时间
+     * @return
+     */
+    List<Stock4MinuteDomain> getStockInfoByCodeAndDate(@Param("stockCode") String stockCode,
+                                                       @Param("startTime") Date startTime,
+                                                       @Param("endTime") Date endTime);
+
+    /**
+     * 查询指定日期范围内指定股票每天的交易数据
+     * @param stockCode 股票code
+     * @param startTime 起始时间
+     * @param endTime 终止时间
+     * @return
+     */
+    List<Stock4EvrDayDomain> getStockInfo4EvrDay(@Param("stockCode") String stockCode,
+                                                 @Param("startTime") Date startTime,
+                                                 @Param("endTime") Date endTime);
 }

@@ -6,6 +6,7 @@ import org.mmj.stock.pojo.entity.StockMarketIndexInfo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author mmj
@@ -28,4 +29,15 @@ public interface StockMarketIndexInfoMapper {
     int updateByPrimaryKey(StockMarketIndexInfo record);
 
     List<InnerMarketDomain> getInnerIndexByTimeAndCodes(@Param("dateTime") Date dateTime, @Param("innerCodes") List<String> innerCodes);
+
+    /**
+     * 根据时间范围和指定的大盘id统计每分钟的交易量
+     * @param markedIds 大盘id集合
+     * @param startTime 交易开始时间
+     * @param endTime 结束时间
+     * @return
+     */
+    List<Map> getStockTradeVol(@Param("markedIds") List<String> markedIds,
+                               @Param("startTime") Date startTime,
+                               @Param("endTime") Date endTime);
 }
