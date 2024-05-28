@@ -65,6 +65,25 @@ public interface StockRtInfoMapper {
                                                        @Param("endTime") Date endTime);
 
     /**
+     * 获取指定日期范围内的收盘日期
+     * @param code 股票编码
+     * @param beginDate 起始时间
+     * @param endDate 结束时间
+     * @return
+     */
+    List<Date> getCloseDates(@Param("code") String code,
+                             @Param("beginDate") Date beginDate,
+                             @Param("endDate") Date endDate);
+    /**
+     * 获取指定股票在指定日期点下的数据
+     * @param code 股票编码
+     * @param dates 指定日期集合
+     * @return
+     */
+    List<Stock4EvrDayDomain> getStockCreenDkLineData(@Param("code") String code,
+                                                     @Param("dates") List<Date> dates);
+
+    /**
      * 查询指定日期范围内指定股票每天的交易数据
      * @param stockCode 股票code
      * @param startTime 起始时间
@@ -74,4 +93,5 @@ public interface StockRtInfoMapper {
     List<Stock4EvrDayDomain> getStockInfo4EvrDay(@Param("stockCode") String stockCode,
                                                  @Param("startTime") Date startTime,
                                                  @Param("endTime") Date endTime);
+
 }

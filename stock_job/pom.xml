@@ -7,69 +7,48 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>stock_backend</artifactId>
+    <artifactId>stock_job</artifactId>
     <packaging>jar</packaging>
-
-    <name>stock_backend</name>
+    <description>
+        该工程核心作用:
+        1.持续采集最新的股票数据，并将数据封装入库;
+        2.当最新股票相关数据采集完毕后，通知backend端刷新缓存;
+    </description>
+    <name>stock_job</name>
     <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <description>
-        该工程核心作用:
-        1.主死实现股票分析数据的展示的后台
-    </description>
+
     <dependencies>
-        <!--引入common工程依赖，common工程引入的资源无需重复导入（依赖传递）-->
         <dependency>
             <groupId>org.mmj.stock</groupId>
             <artifactId>stock_common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
         <!-- 基本依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!--springboot测试依赖-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
-        <!--密码加密和校验工具包-->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-crypto</artifactId>
-        </dependency>
-        <!--redis场景依赖-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <!-- redis创建连接池，默认不会创建连接池 -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-        </dependency>
-        <!--hutool万能工具包-->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-        </dependency>
-<!--        rabbitmq-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
-<!--        CaffeineCache-->
+        <!--引入xxljob核心依赖-->
         <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
+            <groupId>com.xuxueli</groupId>
+            <artifactId>xxl-job-core</artifactId>
         </dependency>
     </dependencies>
-
     <build>
         <!--打包名称-->
         <finalName>${project.artifactId}</finalName>

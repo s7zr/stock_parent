@@ -1,6 +1,10 @@
 package org.mmj.stock.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.mmj.stock.pojo.entity.StockBusiness;
+import org.mmj.stock.pojo.entity.StockRtInfo;
+
+import java.util.List;
 
 /**
 * @author mmj
@@ -21,5 +25,15 @@ public interface StockBusinessMapper {
     int updateByPrimaryKeySelective(StockBusiness record);
 
     int updateByPrimaryKey(StockBusiness record);
+    /**
+     * 获取所有股票的code
+     * @return
+     */
+    List<String> getStockCodes();
 
+    /**
+     * 批量插入功能
+     * @param stockRtInfoList
+     */
+    int insertBatch(@Param("stockRtInfoList") List<StockRtInfo> stockRtInfoList);
 }

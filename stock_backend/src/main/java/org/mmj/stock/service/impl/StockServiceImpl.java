@@ -1,7 +1,9 @@
 package org.mmj.stock.service.impl;
 
+import com.alibaba.druid.sql.ast.statement.SQLForeignKeyImpl;
 import com.alibaba.excel.EasyExcel;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.benmanes.caffeine.cache.Cache;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -39,19 +41,30 @@ public class StockServiceImpl implements StockService {
     private StockBlockRtInfoMapper stockBlockRtInfoMapper;
     @Autowired
     private StockRtInfoMapper stockRtInfoMapper;
+    /**
+     * 注入本地缓存
+     */
+    @Autowired
+    private Cache<String, Object> caffeineCache;
+
     @Override
     public R<List<InnerMarketDomain>> getInnerIndexAll() {
-        //TODO 国内大盘实现
-        //1.获取最新的股票交易时间点
-        Date lastDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
-        //TODO 伪造数据，后续删除
-        lastDate=DateTime.parse("2022-01-03 09:47:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
-        //2.获取国内大盘编码集合
-        List<String> innerCodes = stockInfoConfig.getInner();
-        //3.调用mapper查询
-        List<InnerMarketDomain> infos= stockMarketIndexInfoMapper.getInnerIndexByTimeAndCodes(lastDate,innerCodes);
-        //4.响应
-        return R.ok(infos);
+        //默认从本地缓存加载数据，如果不存在则从数据库加裁并同步到本地缓存
+        //在开盘周期内，本地缓存默认有效期分钟
+        R<List<InnerMarketDomain>> result = (R<List<InnerMarketDomain>>) caffeineCache.get("innerMarketKey", key->{
+            //TODO 国内大盘实现
+            //1.获取最新的股票交易时间点
+            Date lastDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
+            //TODO 伪造数据，后续删除
+            lastDate=DateTime.parse("2022-01-03 09:47:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+            //2.获取国内大盘编码集合
+            List<String> innerCodes = stockInfoConfig.getInner();
+            //3.调用mapper查询
+            List<InnerMarketDomain> infos= stockMarketIndexInfoMapper.getInnerIndexByTimeAndCodes(lastDate,innerCodes);
+            //4.响应
+            return R.ok(infos);
+        });
+        return result;
     }
 
     /**
@@ -315,9 +328,34 @@ public class StockServiceImpl implements StockService {
         //3.返回响应数据
         return R.ok(list);
     }
+//    /**
+//     * 功能描述：单个个股日K数据查询 ，可以根据时间区间查询数日的K线数据
+//     * 		默认查询历史10天的数据；
+//     * @param code 股票编码
+//     * @return
+//     */
+//    @Override
+//    public R<List<Stock4EvrDayDomain>> stockCreenDkLine(String code) {
+//        //1.获取查询的日期范围
+//        //1.1 获取截止时间
+//        DateTime endDateTime = DateTimeUtil.getLastDate4Stock(DateTime.now());
+//        Date endTime = endDateTime.toDate();
+//        //TODO MOCKDATA
+//        endTime=DateTime.parse("2022-01-07 15:00:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+//        //1.2 获取开始时间
+//        DateTime startDateTime = endDateTime.minusDays(10);
+//        Date startTime = startDateTime.toDate();
+//        //TODO MOCKDATA
+//        startTime=DateTime.parse("2022-01-01 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+//        //2.调用mapper接口获取查询的集合信息-方案1
+//        List<Stock4EvrDayDomain> data= stockRtInfoMapper.getStockInfo4EvrDay(code,startTime,endTime);
+//        //3.组装数据，响应
+//        return R.ok(data);
+//    }
+        //sql拆分后的个股K数据查询
     /**
      * 功能描述：单个个股日K数据查询 ，可以根据时间区间查询数日的K线数据
-     * 		默认查询历史10天的数据；
+     * 		默认查询历史20天的数据；
      * @param code 股票编码
      * @return
      */
@@ -335,9 +373,12 @@ public class StockServiceImpl implements StockService {
         //TODO MOCKDATA
         startTime=DateTime.parse("2022-01-01 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
         //2.调用mapper接口获取查询的集合信息-方案1
-        List<Stock4EvrDayDomain> data= stockRtInfoMapper.getStockInfo4EvrDay(code,startTime,endTime);
+//        List<Stock4EvrDayDomain> data= stockRtInfoMapper.getStockInfo4EvrDay(code,startTime,endTime);
+        //方案2：先获取指定日期范围内的收盘时间点集合
+        List<Date> closeDates = stockRtInfoMapper.getCloseDates(code, startTime, endTime);
+        //根据收盘时间获取日K数据
+        List<Stock4EvrDayDomain> data = stockRtInfoMapper.getStockCreenDkLineData(code, closeDates);
         //3.组装数据，响应
         return R.ok(data);
     }
-
 }

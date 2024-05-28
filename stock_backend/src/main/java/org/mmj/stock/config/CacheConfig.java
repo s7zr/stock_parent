@@ -1,5 +1,7 @@
 package org.mmj.stock.config;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +11,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-public class RedisCacheConfig {
+public class CacheConfig {
     /**
      * 配置redisTemplate bean，自定义数据的序列化的方式
      * @param redisConnectionFactory 连接redis的工厂，底层有场景依赖启动时，自动加载
@@ -35,5 +37,15 @@ public class RedisCacheConfig {
         //5.初始化参数设置
         template.afterPropertiesSet();
         return template;
+    }
+    @Bean
+    public Cache<String,Object> caffeineCache(){
+        Cache<String, Object> cache = Caffeine
+                .newBuilder()
+                .maximumSize(200)//设置缓存数量上限
+                .initialCapacity(100)//初始缓存空间大小
+                .recordStats()//开启统计
+                .build();
+        return cache;
     }
 }
