@@ -1,6 +1,11 @@
 package org.mmj.stock.mapper;
 
+import org.apache.ibatis.annotations.Param;
+import org.mmj.stock.pojo.domain.OuterMarketDomain;
 import org.mmj.stock.pojo.entity.StockOuterMarketIndexInfo;
+
+import java.util.Date;
+import java.util.List;
 
 /**
 * @author mmj
@@ -21,5 +26,12 @@ public interface StockOuterMarketIndexInfoMapper {
     int updateByPrimaryKeySelective(StockOuterMarketIndexInfo record);
 
     int updateByPrimaryKey(StockOuterMarketIndexInfo record);
+    /**
+     * 根据时间获取国外大盘数据
+     * @param dateTime
+     * @param outerCodes
+     * @return
+     */
+    List<OuterMarketDomain> getOuterIndexByTimeAndCodes(@Param("dateTime") Date dateTime, @Param("outerCodes") List<String> outerCodes);
 
 }

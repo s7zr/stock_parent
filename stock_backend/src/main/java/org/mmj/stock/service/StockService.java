@@ -64,4 +64,10 @@ public interface StockService {
      * @param code 股票编码
      */
     R<List<Stock4EvrDayDomain>> stockCreenDkLine(String code);
+
+    /**
+     * 查询最新的国外大盘信息
+     * @return
+     */
+    R<List<OuterMarketDomain>> getOuterIndexAll();
 }

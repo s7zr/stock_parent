@@ -26,6 +26,21 @@
         from stock_outer_market_index_info
         where  id = #{id,jdbcType=BIGINT} 
     </select>
+    <select id="getOuterIndexByTimeAndCodes" resultType="org.mmj.stock.pojo.domain.OuterMarketDomain">
+        select
+        market_name as name,
+        cur_point as curPoint,
+        updown as upDown,
+        rose as rose,
+        cur_time as curTime
+        from stock_outer_market_index_info
+        where
+        cur_time =#{dateTime} and
+        market_code in
+        <foreach collection="outerCodes" item="mCode" open="(" separator="," close=")">
+            #{mCode}
+        </foreach>
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_outer_market_index_info

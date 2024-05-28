@@ -31,6 +31,7 @@ public class StockController {
     @Autowired
     private StockService stockService;
 
+
     /**
      * 查询最新的国内大盘信息
      *
@@ -131,4 +132,16 @@ public class StockController {
     public R<List<Stock4EvrDayDomain>> getDayKLinData(@RequestParam("code") String stockCode){
         return stockService.stockCreenDkLine(stockCode);
     }
+
+    /**
+     * 查询最新的国外大盘信息
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询最新的国外大盘信息", notes = "查询最新的国外大盘信息", httpMethod = "GET")
+    @GetMapping("/external/index")
+    public R<List<OuterMarketDomain>> getOuterIndexAll() {
+        return stockService.getOuterIndexAll();
+    }
+
 }

@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.mmj.stock.mapper.StockBlockRtInfoMapper;
 import org.mmj.stock.mapper.StockMarketIndexInfoMapper;
+import org.mmj.stock.mapper.StockOuterMarketIndexInfoMapper;
 import org.mmj.stock.mapper.StockRtInfoMapper;
 import org.mmj.stock.pojo.domain.*;
 import org.mmj.stock.pojo.vo.StockInfoConfig;
@@ -46,6 +47,8 @@ public class StockServiceImpl implements StockService {
      */
     @Autowired
     private Cache<String, Object> caffeineCache;
+    @Autowired
+    private StockOuterMarketIndexInfoMapper stockOuterMarketIndexInfoMapper;
 
     @Override
     public R<List<InnerMarketDomain>> getInnerIndexAll() {
@@ -302,7 +305,7 @@ public class StockServiceImpl implements StockService {
     /**
      * 功能描述：查询单个个股的分时行情数据，也就是统计指定股票T日每分钟的交易数据；
      *         如果当前日期不在有效时间内，则以最近的一个股票交易时间作为查询时间点
-     * @param code 股票编码
+     * @param stockCode 股票编码
      * @return
      */
     @Override
@@ -380,5 +383,24 @@ public class StockServiceImpl implements StockService {
         List<Stock4EvrDayDomain> data = stockRtInfoMapper.getStockCreenDkLineData(code, closeDates);
         //3.组装数据，响应
         return R.ok(data);
+    }
+
+    @Override
+    public R<List<OuterMarketDomain>> getOuterIndexAll() {
+        //默认从本地缓存加载数据，如果不存在则从数据库加裁并同步到本地缓存
+        //在开盘周期内，本地缓存默认有效期分钟
+        R<List<OuterMarketDomain>> result = (R<List<OuterMarketDomain>>) caffeineCache.get("outerMarketKey", key->{
+            //1.获取最新的股票交易时间点
+            Date lastDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
+            //TODO 伪造数据，后续删除
+            lastDate=DateTime.parse("2022-01-03 09:47:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+            //2.获取国外大盘编码集合
+            List<String> outerCodes = stockInfoConfig.getOuter();
+            //3.调用mapper查询
+            List<OuterMarketDomain> infos = stockOuterMarketIndexInfoMapper.getOuterIndexByTimeAndCodes(lastDate,outerCodes);
+            //4.响应
+            return R.ok(infos);
+        });
+        return result;
     }
 }

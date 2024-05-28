@@ -2,6 +2,7 @@ package org.mmj.stock.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.mmj.stock.pojo.domain.InnerMarketDomain;
+import org.mmj.stock.pojo.domain.OuterMarketDomain;
 import org.mmj.stock.pojo.entity.StockMarketIndexInfo;
 
 import java.util.ArrayList;
@@ -29,6 +30,12 @@ public interface StockMarketIndexInfoMapper {
 
     int updateByPrimaryKey(StockMarketIndexInfo record);
 
+    /**
+     * 根据时间获取国内大盘数据
+     * @param dateTime
+     * @param innerCodes
+     * @return
+     */
     List<InnerMarketDomain> getInnerIndexByTimeAndCodes(@Param("dateTime") Date dateTime, @Param("innerCodes") List<String> innerCodes);
 
     /**
@@ -47,4 +54,5 @@ public interface StockMarketIndexInfoMapper {
      * @param infos
      */
     int insertBatch(@Param("infos") List<StockMarketIndexInfo> infos);
+
 }
