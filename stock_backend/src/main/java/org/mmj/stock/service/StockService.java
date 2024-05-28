@@ -76,4 +76,6 @@ public interface StockService {
      * @return
      */
     R<List<Map>> getSearchStr(String searchStr);
+
+    R<StockDescribeDomain> getStockDescribe(String code);
 }

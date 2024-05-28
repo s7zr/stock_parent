@@ -151,4 +151,13 @@ public class StockController {
     public R<List<Map>> getSearchStr(String searchStr){
         return stockService.getSearchStr(searchStr);
     }
+
+    /**
+     * 个股主营业务查询接口
+     */
+    @ApiOperation(value = "个股主营业务查询接口", notes = "个股主营业务查询接口", httpMethod = "GET")
+    @GetMapping("/stock/describe")
+    public R<StockDescribeDomain> getStockDescribe(String code){
+        return stockService.getStockDescribe(code);
+    }
 }

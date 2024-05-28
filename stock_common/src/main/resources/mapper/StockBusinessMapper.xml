@@ -33,6 +33,14 @@
         from stock_business
         where stock_code like CONCAT(#{searchStr}, '%')
     </select>
+    <select id="getStockDescribe" resultType="org.mmj.stock.pojo.domain.StockDescribeDomain">
+        select stock_code as code,
+               block_name as trade,
+               business as business,
+               stock_name as name
+        from stock_business
+        where stock_code = #{code}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_business

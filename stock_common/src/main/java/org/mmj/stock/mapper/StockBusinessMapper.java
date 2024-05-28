@@ -1,6 +1,7 @@
 package org.mmj.stock.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.mmj.stock.pojo.domain.StockDescribeDomain;
 import org.mmj.stock.pojo.entity.StockBusiness;
 import org.mmj.stock.pojo.entity.StockRtInfo;
 
@@ -43,4 +44,9 @@ public interface StockBusinessMapper {
      * @return
      */
     List<Map> getSearchStr(@Param("searchStr") String searchStr);
+    /**
+     * 个股主营业务查询接口
+     * @return
+     */
+    StockDescribeDomain getStockDescribe(String code);
 }

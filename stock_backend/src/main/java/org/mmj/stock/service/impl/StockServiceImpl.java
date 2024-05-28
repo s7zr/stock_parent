@@ -386,6 +386,10 @@ public class StockServiceImpl implements StockService {
         return R.ok(data);
     }
 
+    /**
+     * 获取国外大盘的所有数据
+     * @return
+     */
     @Override
     public R<List<OuterMarketDomain>> getOuterIndexAll() {
         //默认从本地缓存加载数据，如果不存在则从数据库加裁并同步到本地缓存
@@ -405,10 +409,26 @@ public class StockServiceImpl implements StockService {
         return result;
     }
 
+    /**
+     * 根据输入的个股代码，进行模糊查询，返回证券代码和证券名称
+     * @param searchStr
+     * @return
+     */
     @Override
     public R<List<Map>> getSearchStr(String searchStr) {
         List<Map> searchStrs = new ArrayList<>();
         searchStrs = stockBusinessMapper.getSearchStr(searchStr);
         return R.ok(searchStrs);
+    }
+
+    /**
+     * 个股描述功能实现说明
+     * @param code
+     * @return
+     */
+    @Override
+    public R<StockDescribeDomain> getStockDescribe(String code) {
+        StockDescribeDomain info = stockBusinessMapper.getStockDescribe(code);
+        return R.ok(info);
     }
 }
