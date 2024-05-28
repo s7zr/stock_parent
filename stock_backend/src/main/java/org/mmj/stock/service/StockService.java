@@ -70,4 +70,10 @@ public interface StockService {
      * @return
      */
     R<List<OuterMarketDomain>> getOuterIndexAll();
+
+    /**
+     * 根据输入的个股代码，进行模糊查询，返回证券代码和证券名称
+     * @return
+     */
+    R<List<Map>> getSearchStr(String searchStr);
 }

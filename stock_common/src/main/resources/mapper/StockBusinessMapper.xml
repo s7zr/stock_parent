@@ -27,6 +27,12 @@
     <select id="getStockCodes" resultType="string">
         select stock_code from stock_business
     </select>
+    <select id="getSearchStr" resultType="java.util.Map">
+        select stock_name as name,
+               stock_code as code
+        from stock_business
+        where stock_code like CONCAT(#{searchStr}, '%')
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_business

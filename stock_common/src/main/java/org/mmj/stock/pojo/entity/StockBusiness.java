@@ -2,6 +2,9 @@ package org.mmj.stock.pojo.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import lombok.Data;
 
 /**
@@ -41,4 +44,5 @@ public class StockBusiness implements Serializable {
     private Date updateTime;
 
     private static final long serialVersionUID = 1L;
+
 }

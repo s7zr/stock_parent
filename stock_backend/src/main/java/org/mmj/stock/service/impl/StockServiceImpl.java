@@ -7,13 +7,12 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.mmj.stock.mapper.StockBlockRtInfoMapper;
-import org.mmj.stock.mapper.StockMarketIndexInfoMapper;
-import org.mmj.stock.mapper.StockOuterMarketIndexInfoMapper;
-import org.mmj.stock.mapper.StockRtInfoMapper;
+import org.mmj.stock.mapper.*;
 import org.mmj.stock.pojo.domain.*;
+import org.mmj.stock.pojo.entity.StockBusiness;
 import org.mmj.stock.pojo.vo.StockInfoConfig;
 import org.mmj.stock.service.StockService;
 import org.mmj.stock.utils.DateTimeUtil;
@@ -42,6 +41,8 @@ public class StockServiceImpl implements StockService {
     private StockBlockRtInfoMapper stockBlockRtInfoMapper;
     @Autowired
     private StockRtInfoMapper stockRtInfoMapper;
+    @Autowired
+    private StockBusinessMapper stockBusinessMapper;
     /**
      * 注入本地缓存
      */
@@ -402,5 +403,12 @@ public class StockServiceImpl implements StockService {
             return R.ok(infos);
         });
         return result;
+    }
+
+    @Override
+    public R<List<Map>> getSearchStr(String searchStr) {
+        List<Map> searchStrs = new ArrayList<>();
+        searchStrs = stockBusinessMapper.getSearchStr(searchStr);
+        return R.ok(searchStrs);
     }
 }

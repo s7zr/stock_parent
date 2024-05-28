@@ -10,10 +10,7 @@ import org.mmj.stock.service.StockService;
 import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -107,6 +104,7 @@ public class StockController {
      * 如果当前日期不在有效时间内，则以最近的一个股票交易时间作为查询点
      * @return
      */
+    @ApiOperation(value = "查询当前时间下股票的涨跌幅度区间统计功能 如果当前日期不在有效时间内，则以最近的一个股票交易时间作为查询点", notes = "查询当前时间下股票的涨跌幅度区间统计功能 如果当前日期不在有效时间内，则以最近的一个股票交易时间作为查询点", httpMethod = "GET")
     @GetMapping("/stock/updown")
     public R<Map> getStockUpDown(){
         return stockService.stockUpDownScopeCount();
@@ -118,6 +116,7 @@ public class StockController {
      * @param code 股票编码
      * @return
      */
+    @ApiOperation(value = "功能描述：查询单个个股的分时行情数据，也就是统计指定股票T日每分钟的交易数据；         如果当前日期不在有效时间内，则以最近的一个股票交易时间作为查询时间点", notes = "功能描述：查询单个个股的分时行情数据，也就是统计指定股票T日每分钟的交易数据；         如果当前日期不在有效时间内，则以最近的一个股票交易时间作为查询时间点", httpMethod = "GET")
     @GetMapping("/stock/screen/time-sharing")
     public R<List<Stock4MinuteDomain>> stockScreenTimeSharing(String code){
         return stockService.stockScreenTimeSharing(code);
@@ -144,4 +143,12 @@ public class StockController {
         return stockService.getOuterIndexAll();
     }
 
+    /**
+     * 根据输入的个股代码，进行模糊查询，返回证券代码和证券名称
+     */
+    @ApiOperation(value = "根据输入的个股代码，进行模糊查询，返回证券代码和证券名称", notes = "根据输入的个股代码，进行模糊查询，返回证券代码和证券名称", httpMethod = "GET")
+    @GetMapping("/stock/search")
+    public R<List<Map>> getSearchStr(String searchStr){
+        return stockService.getSearchStr(searchStr);
+    }
 }

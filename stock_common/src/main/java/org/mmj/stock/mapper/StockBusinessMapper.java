@@ -5,6 +5,7 @@ import org.mmj.stock.pojo.entity.StockBusiness;
 import org.mmj.stock.pojo.entity.StockRtInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author mmj
@@ -36,4 +37,10 @@ public interface StockBusinessMapper {
      * @param stockRtInfoList
      */
     int insertBatch(@Param("stockRtInfoList") List<StockRtInfo> stockRtInfoList);
+
+    /**
+     * 根据输入的个股代码，进行模糊查询，返回证券代码和证券名称
+     * @return
+     */
+    List<Map> getSearchStr(@Param("searchStr") String searchStr);
 }
