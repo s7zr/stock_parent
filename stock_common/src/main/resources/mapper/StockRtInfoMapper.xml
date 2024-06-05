@@ -166,6 +166,19 @@
         </foreach>
         order by sri2.cur_time;
     </select>
+    <select id="getSecondDetail" resultType="org.mmj.stock.pojo.domain.Stock4HourDomain">
+        select sri2.cur_time        as curDate,
+               sri2.trade_amount    as tradeAmt,
+               sri2.min_price       as lowPrice,
+               sri2.max_price       as highPrice,
+               sri2.open_price      as openPrice,
+               sri2.trade_volume    as tradeVol,
+               sri2.cur_price       as closePrice,
+               sri2.pre_close_price as preClosePrice
+        from stock_rt_info as sri2
+        where sri2.stock_code = #{code}
+          and sri2.cur_time = #{endTime}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_rt_info
         where  id = #{id,jdbcType=BIGINT}

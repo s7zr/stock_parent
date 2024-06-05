@@ -77,5 +77,17 @@ public interface StockService {
      */
     R<List<Map>> getSearchStr(String searchStr);
 
+    /**
+     * 个股主营业务查询
+     * @param code
+     * @return
+     */
     R<StockDescribeDomain> getStockDescribe(String code);
+
+    /**
+     * 获取个股最新分时行情数据
+     * @param code
+     * @return
+     */
+    R<Stock4HourDomain> getSecondDetail(String code);
 }

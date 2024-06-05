@@ -2,6 +2,7 @@ package org.mmj.stock.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.mmj.stock.pojo.domain.Stock4EvrDayDomain;
+import org.mmj.stock.pojo.domain.Stock4HourDomain;
 import org.mmj.stock.pojo.domain.Stock4MinuteDomain;
 import org.mmj.stock.pojo.domain.StockUpdownDomain;
 import org.mmj.stock.pojo.entity.StockRtInfo;
@@ -94,4 +95,11 @@ public interface StockRtInfoMapper {
                                                  @Param("startTime") Date startTime,
                                                  @Param("endTime") Date endTime);
 
+    /**
+     * 获取个股最新分时行情数据
+     * @param endTime
+     * @param code
+     * @return
+     */
+    Stock4HourDomain getSecondDetail(@Param("endTime") Date endTime, @Param("code") String code);
 }

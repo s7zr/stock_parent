@@ -160,4 +160,13 @@ public class StockController {
     public R<StockDescribeDomain> getStockDescribe(String code){
         return stockService.getStockDescribe(code);
     }
+
+    /**
+     * 获取个股最新分时行情数据，主要包含：
+     * 	开盘价、前收盘价、最新价、最高价、最低价、成交金额和成交量、交易时间信息;
+     */
+    @GetMapping("/stock/screen/second/detail")
+    public R<Stock4HourDomain> getSecondDetail(@RequestParam("code") String code){
+        return stockService.getSecondDetail(code);
+    }
 }
