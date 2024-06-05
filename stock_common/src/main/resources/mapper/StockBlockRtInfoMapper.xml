@@ -43,6 +43,20 @@
         order by sbr.trade_volume desc
             limit 10
     </select>
+    <select id="getBlockInfoLimit" resultType="org.mmj.stock.pojo.domain.StockBlockDomain">
+        select
+            sbri.company_num as companyNum,
+            sbri.trade_amount as tradeAmt,
+            sbri.label as code,
+            sbri.avg_price as avgPrice,
+            sbri.block_name as name,
+            sbri.cur_time as curDate,
+            sbri.trade_volume as tradeVol,
+            sbri.updown_rate as updownRate
+        from stock_block_rt_info as sbri
+        where sbri.cur_time=#{curDate}
+        order by tradevol desc limit #{limit}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_block_rt_info

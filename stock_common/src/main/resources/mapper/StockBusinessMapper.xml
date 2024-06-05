@@ -42,7 +42,7 @@
         where stock_code = #{code}
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <delete id="deleteByPrimaryKey" parameterType="String">
         delete from stock_business
         where  stock_code = #{stockCode,jdbcType=CHAR} 
     </delete>

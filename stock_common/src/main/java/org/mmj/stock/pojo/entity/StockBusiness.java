@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -12,6 +13,7 @@ import lombok.Data;
  * @TableName stock_business
  */
 @Data
+@Builder
 public class StockBusiness implements Serializable {
     /**
      *  股票编码

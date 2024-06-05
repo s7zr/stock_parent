@@ -28,4 +28,12 @@ public interface StockBlockRtInfoMapper {
     int updateByPrimaryKey(StockBlockRtInfo record);
 
     List<StockBlockDomain> sectorAllLimit(@Param("timePoint") Date timePoint);
+
+    /**
+     * 查询范围内的
+     * @param curDate
+     * @param limit
+     * @return
+     */
+    List<StockBlockDomain> getBlockInfoLimit(@Param("curDate") Date curDate, @Param("limit") int limit);
 }
