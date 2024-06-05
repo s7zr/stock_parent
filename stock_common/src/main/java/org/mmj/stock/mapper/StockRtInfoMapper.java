@@ -1,10 +1,7 @@
 package org.mmj.stock.mapper;
 
 import org.apache.ibatis.annotations.Param;
-import org.mmj.stock.pojo.domain.Stock4EvrDayDomain;
-import org.mmj.stock.pojo.domain.Stock4HourDomain;
-import org.mmj.stock.pojo.domain.Stock4MinuteDomain;
-import org.mmj.stock.pojo.domain.StockUpdownDomain;
+import org.mmj.stock.pojo.domain.*;
 import org.mmj.stock.pojo.entity.StockRtInfo;
 
 import java.util.Date;
@@ -102,4 +99,12 @@ public interface StockRtInfoMapper {
      * @return
      */
     Stock4HourDomain getSecondDetail(@Param("endTime") Date endTime, @Param("code") String code);
+
+    /**
+     * 个股交易流水行情数据查询--查询最新交易流水，按照交易时间降序取前10
+     * @param endTime
+     * @param code
+     * @return
+     */
+    List<StockRtLimit10> getScreenSecond(@Param("endTime") Date endTime, @Param("code") String code);
 }

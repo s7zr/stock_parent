@@ -169,4 +169,12 @@ public class StockController {
     public R<Stock4HourDomain> getSecondDetail(@RequestParam("code") String code){
         return stockService.getSecondDetail(code);
     }
+
+    /**
+     * 功能描述：个股交易流水行情数据查询--查询最新交易流水，按照交易时间降序取前10
+     */
+    @GetMapping("/stock/screen/second")
+    public R<List<StockRtLimit10>> getScreenSecond(@RequestParam("code")String code){
+        return stockService.getScreenSecond(code);
+    }
 }

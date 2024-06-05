@@ -446,4 +446,19 @@ public class StockServiceImpl implements StockService {
         Stock4HourDomain stock4HourDomain = stockRtInfoMapper.getSecondDetail(endTime,code);
         return R.ok(stock4HourDomain);
     }
+
+    /**
+     * 个股交易流水行情数据查询--查询最新交易流水，按照交易时间降序取前10
+     * @param code
+     * @return
+     */
+    @Override
+    public R<List<StockRtLimit10>> getScreenSecond(String code) {
+        DateTime endDateTime = DateTimeUtil.getLastDate4Stock(DateTime.now());
+        Date endTime = endDateTime.toDate();
+        //TODO MOCKDATA
+        // endTime=DateTime.parse("2021-12-19 09:59:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        List<StockRtLimit10> stockRtLimit10s = stockRtInfoMapper.getScreenSecond(endTime,code);
+        return R.ok(stockRtLimit10s);
+    }
 }
