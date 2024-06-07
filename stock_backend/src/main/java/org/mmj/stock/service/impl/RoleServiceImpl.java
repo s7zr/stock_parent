@@ -133,4 +133,36 @@ public class RoleServiceImpl implements RoleService {
         }
         return R.ok(ResponseCode.SUCCESS.getMessage());
     }
+    /**
+     * 根据角色id删除角色信息
+     * @param roleId
+     * @return
+     */
+    @Override
+    public R<String> deleteRoleById(Long roleId) {
+        //逻辑删除，更新角色状态
+        SysRole role = SysRole.builder().id(roleId).deleted(0).updateTime(new Date()).build();
+        int count = this.sysRoleMapper.updateByPrimaryKeySelective(role);
+        if (count!=1) {
+            throw new BusinessException(ResponseCode.ERROR.getMessage());
+        }
+        return R.ok(ResponseCode.SUCCESS.getMessage());
+    }
+    /**
+     * 更新用户的状态信息
+     * @param roleId 角色id
+     * @param status 状态 1.正常 0：启用
+     * @return
+     */
+    @Override
+    public R<String> updateRoleStatus(Long roleId, Integer status) {
+        //组装数据
+        SysRole role = SysRole.builder().id(roleId).status(status).updateTime(new Date()).build();
+        //更新
+        int count = this.sysRoleMapper.updateByPrimaryKeySelective(role);
+        if (count!=1) {
+            throw new BusinessException(ResponseCode.ERROR.getMessage());
+        }
+        return R.ok(ResponseCode.SUCCESS.getMessage());
+    }
 }

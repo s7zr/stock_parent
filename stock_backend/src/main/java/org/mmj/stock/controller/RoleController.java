@@ -59,4 +59,24 @@ public class RoleController {
     public R<String> updateRoleWithPermissions(@RequestBody RoleUpdateVo vo){
         return roleService.updateRoleWithPermissions(vo);
     }
+    /**
+     * 根据角色id删除角色信息
+     * @param roleId
+     * @return
+     */
+    @DeleteMapping("/role/{roleId}")
+    public R<String> deleteRole(@PathVariable("roleId")Long roleId){
+        return roleService.deleteRoleById(roleId);
+    }
+
+    /**
+     * 更新用户的状态信息
+     * @param roleId 角色id
+     * @param status 状态 1.正常 0：禁用
+     * @return
+     */
+    @PostMapping("/role/{roleId}/{status}")
+    public R<String> updateRoleStatus(@PathVariable("roleId") Long roleId,@PathVariable("status") Integer status){
+        return roleService.updateRoleStatus(roleId,status);
+    }
 }

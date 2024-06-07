@@ -41,4 +41,17 @@ public interface RoleService {
      * @return
      */
     R<String> updateRoleWithPermissions(RoleUpdateVo vo);
+    /**
+     * 根据角色id删除角色信息
+     * @param roleId
+     * @return
+     */
+    R<String> deleteRoleById(Long roleId);
+    /**
+     * 更新用户的状态信息
+     * @param roleId 角色id
+     * @param status 状态 1.正常 0：启用
+     * @return
+     */
+    R<String> updateRoleStatus(Long roleId, Integer status);
 }
