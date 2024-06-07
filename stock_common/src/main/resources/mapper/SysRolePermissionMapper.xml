@@ -22,6 +22,14 @@
         from sys_role_permission
         where  id = #{id,jdbcType=BIGINT} 
     </select>
+    <select id="getPermissionIdsByRoleId" resultType="java.lang.String">
+        SELECT
+            rp.permission_id
+        FROM
+            sys_role_permission AS rp
+        WHERE
+            rp.role_id = #{roleId}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from sys_role_permission

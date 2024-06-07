@@ -6,6 +6,8 @@ import org.mmj.stock.vo.resp.R;
 import org.mmj.stock.vo.resp.RolePageReqVo;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 /**
  * @author mmj
  * @Description
@@ -25,4 +27,11 @@ public interface RoleService {
      * @return
      */
     R<String> addRoleWithPermissions(RoleAddVo vo);
+
+    /**
+     * 根据角色Id查找对应的权限id集合
+     * @param roleId
+     * @return
+     */
+    R<Set<String>> getPermissionIdsByRoleId(Long roleId);
 }

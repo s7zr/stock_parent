@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import org.mmj.stock.pojo.entity.SysRolePermission;
 
 import java.util.List;
+import java.util.Set;
 
 /**
 * @author mmj
@@ -30,4 +31,10 @@ public interface SysRolePermissionMapper {
      * @return
      */
     int addRolePermissionBatch(@Param("rps") List<SysRolePermission> rps);
+    /**
+     * 根据角色id查询对应的权限id集合
+     * @param roleId 角色id
+     * @return
+     */
+    Set<String> getPermissionIdsByRoleId(Long roleId);
 }

@@ -20,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -85,5 +87,18 @@ public class RoleServiceImpl implements RoleService {
             }
         }
         return R.ok(ResponseCode.SUCCESS.getMessage());
+    }
+
+    /**
+     * 根据角色id查找对应的权限id集合
+     * @param roleId
+     * @return
+     */
+    @Override
+    public R<Set<String>> getPermissionIdsByRoleId(Long roleId) {
+        //根据角色id查找权限id集合
+        Set<String> permissionIds =this.sysRolePermissionMapper.getPermissionIdsByRoleId(roleId);
+        permissionIds = permissionIds == null ? new HashSet<>() : permissionIds;
+        return R.ok(permissionIds);
     }
 }

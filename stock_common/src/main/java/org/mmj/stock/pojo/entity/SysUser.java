@@ -2,8 +2,10 @@ package org.mmj.stock.pojo.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.Data;
 /**
  * 用户表
  * @TableName sys_user
@@ -13,6 +15,7 @@ public class SysUser implements Serializable {
     /**
      * 用户id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**

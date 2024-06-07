@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,6 +20,7 @@ public class StockBusiness implements Serializable {
     /**
      *  股票编码
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private String stockCode;
 
     /**

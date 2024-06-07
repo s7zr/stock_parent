@@ -6,10 +6,9 @@ import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
 import org.mmj.stock.vo.resp.RolePageReqVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 /**
  * @author mmj
@@ -38,5 +37,15 @@ public class RoleController {
     @PostMapping("/role")
     public R<String> addRoleWithPermissions(@RequestBody RoleAddVo vo){
         return roleService.addRoleWithPermissions(vo);
+    }
+
+    /**
+     * 根据角色id查找对应的权限id集合
+     * @param roleId
+     * @return
+     */
+    @GetMapping("/role/{roleId}")
+    public R<Set<String>>  getPermissionIdsByRoleId(@PathVariable("roleId") Long roleId){
+        return roleService.getPermissionIdsByRoleId(roleId);
     }
 }

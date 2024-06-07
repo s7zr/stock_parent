@@ -47,6 +47,7 @@ public class CommonConfig {
      * 统一定义Long序列化转String设置（所有的Long序列化成String>
      * @return
      */
+    @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(){
         //构建http信息转化对象
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();

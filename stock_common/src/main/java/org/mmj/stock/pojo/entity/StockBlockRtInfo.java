@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +23,7 @@ public class StockBlockRtInfo implements Serializable {
     /**
      * 板块主键ID（业务无关）
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**

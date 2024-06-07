@@ -1,5 +1,7 @@
 package org.mmj.stock.vo.resp;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.util.List;
@@ -14,6 +16,7 @@ public class PermissionRespNodeVo {
     /**
      * 角色ID
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      * 角色标题
