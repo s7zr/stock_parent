@@ -10,6 +10,7 @@ import org.mmj.stock.pojo.entity.SysUser;
 import org.mmj.stock.service.UserServiceExt;
 import org.mmj.stock.utils.IdWorker;
 import org.mmj.stock.vo.req.UserAddReqVo;
+import org.mmj.stock.vo.req.UserEditReqVO;
 import org.mmj.stock.vo.req.UserPageReqVo;
 import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
@@ -78,6 +79,25 @@ public class UserServiceIExtImpl implements UserServiceExt {
         user.setDeleted(1);
         //TODO 获取当前操作用户的id
         int count = this.sysUserMapperExt.insert(user);
+        if (count!=1) {
+            throw new BusinessException(ResponseCode.ERROR.getMessage());
+        }
+        return R.ok(ResponseCode.SUCCESS.getMessage());
+    }
+    /**
+     * 更新用户信息
+     * @param vo
+     * @return
+     */
+    @Override
+    public R<String> updateUser(UserEditReqVO vo) {
+        SysUser user = new SysUser();
+        BeanUtils.copyProperties(vo,user);
+        //TODO 设置更新者ID
+        //设置更新时间
+        user.setUpdateTime(new Date());
+        //更新用户信息
+        int count = this.sysUserMapperExt.updateByPrimaryKeySelective(user);
         if (count!=1) {
             throw new BusinessException(ResponseCode.ERROR.getMessage());
         }

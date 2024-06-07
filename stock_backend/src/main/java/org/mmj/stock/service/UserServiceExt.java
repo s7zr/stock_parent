@@ -3,6 +3,7 @@ package org.mmj.stock.service;
 import org.mmj.stock.pojo.entity.SysUser;
 import org.mmj.stock.vo.req.LoginReqVo;
 import org.mmj.stock.vo.req.UserAddReqVo;
+import org.mmj.stock.vo.req.UserEditReqVO;
 import org.mmj.stock.vo.req.UserPageReqVo;
 import org.mmj.stock.vo.resp.LoginRespVo;
 import org.mmj.stock.vo.resp.PageResult;
@@ -25,4 +26,10 @@ public interface UserServiceExt {
      */
     R<String> addUser(UserAddReqVo vo);
 
+    /**
+     * 更新用户信息
+     * @param vo
+     * @return
+     */
+    R<String> updateUser(UserEditReqVO vo);
 }

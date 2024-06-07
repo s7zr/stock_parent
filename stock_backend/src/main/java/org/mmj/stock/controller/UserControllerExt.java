@@ -41,16 +41,16 @@ public class UserControllerExt {
     public R<String> addUser(@RequestBody UserAddReqVo vo){
         return this.userService.addUser(vo);
     }
-//
-//    /**
-//     * 更新用户信息
-//     * @param vo
-//     * @return
-//     */
-//    @PutMapping("/user")
-//    public R<String> updateUser(@RequestBody UserEditReqVO vo){
-//        return this.userService.updateUser(vo);
-//    }
+
+    /**
+     * 更新用户信息
+     * @param vo
+     * @return
+     */
+    @PutMapping("/user")
+    public R<String> updateUser(@RequestBody UserEditReqVO vo){
+        return this.userService.updateUser(vo);
+    }
 //
 //    /**
 //     * 获取用户具有的角色信息，以及所有角色信息
