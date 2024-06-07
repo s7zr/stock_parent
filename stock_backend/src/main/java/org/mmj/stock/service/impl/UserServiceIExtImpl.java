@@ -8,10 +8,12 @@ import org.mmj.stock.mapper.*;
 import org.mmj.stock.pojo.domain.*;
 import org.mmj.stock.pojo.entity.SysRole;
 import org.mmj.stock.pojo.entity.SysUser;
+import org.mmj.stock.pojo.entity.SysUserRole;
 import org.mmj.stock.service.UserServiceExt;
 import org.mmj.stock.utils.IdWorker;
 import org.mmj.stock.vo.req.UserAddReqVo;
 import org.mmj.stock.vo.req.UserEditReqVO;
+import org.mmj.stock.vo.req.UserOwnRoleReqVo;
 import org.mmj.stock.vo.req.UserPageReqVo;
 import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
@@ -21,9 +23,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("userServiceExt")
 @Slf4j
@@ -126,5 +130,56 @@ public class UserServiceIExtImpl implements UserServiceExt {
         vo.setOwnRoleIds(roleIds);
         vo.setAllRole(roles);
         return R.ok(vo);
+    }
+    /**
+     * 更新用户角色信息
+     * @param vo
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public R<String> updateUserOwnRoles(UserOwnRoleReqVo vo) {
+        //1.判断用户id是否存在
+        if (vo.getUserId()==null) {
+            throw new BusinessException(ResponseCode.DATA_ERROR.getMessage());
+        }
+        //2.删除用户原来所拥有的角色id
+        this.sysUserRoleMapper.deleteByUserId(vo.getUserId());
+        //如果对应集合为空，则说明用户将所有角色都清除了
+        if (CollectionUtils.isEmpty(vo.getRoleIds())) {
+            return R.ok(ResponseCode.SUCCESS.getMessage());
+        }
+        //封装用户角色对象集合
+
+        List<SysUserRole> list = vo.getRoleIds().stream().map(roleId -> {
+            SysUserRole userRole = SysUserRole.builder().
+                    userId(vo.getUserId()).roleId(roleId).
+                    createTime(new Date()).id(idWorker.nextId()).build();
+            return userRole;
+        }).collect(Collectors.toList());
+        //批量插入
+        int count= this.sysUserRoleMapper.insertBatch(list);
+        if (count==0) {
+            throw new BusinessException(ResponseCode.ERROR.getMessage());
+        }
+        return R.ok(ResponseCode.SUCCESS.getMessage());
+    }
+    /**
+     * 批量删除用户信息
+     * @param userIds
+     * @return
+     */
+    @Override
+    public R<String> deleteUsers(List<Long> userIds) {
+        //判断集合是否为空
+        if (CollectionUtils.isEmpty(userIds)) {
+            throw new BusinessException(ResponseCode.DATA_ERROR.getMessage());
+        }
+        //删除用户未逻辑删除
+        int result=this.sysUserMapperExt.updateUserStatus4Deleted(userIds);
+        if (result==0) {
+            throw new BusinessException(ResponseCode.ERROR.getMessage());
+        }
+        return R.ok(ResponseCode.SUCCESS.getMessage());
     }
 }

@@ -42,4 +42,10 @@ public interface SysUserMapperExt {
      * @return
      */
     SysUser findUserByUserName(String username);
+    /**
+     * 逻辑删除用户信息
+     * @param userIds
+     * @return
+     */
+    int updateUserStatus4Deleted(List<Long> userIds);
 }

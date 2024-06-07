@@ -6,6 +6,8 @@ import org.mmj.stock.vo.resp.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author mmj
  * @Description
@@ -62,28 +64,28 @@ public class UserControllerExt {
         return this.userService.getUserOwnRole(userId);
     }
 
-//    /**
-//     * 更新用户角色信息
-//     * @param vo
-//     * @return
-//     */
-//    @PutMapping("/user/roles")
-//    public R<String> updateUserOwnRoles(@RequestBody UserOwnRoleReqVo vo){
-//        return this.userService.updateUserOwnRoles(vo);
-//    }
-//
-//    /**
-//     * 批量删除用户信息
-//     * delete请求可通过请求体携带数据
-//     * @param userIds
-//     * @return
-//     */
-//    @DeleteMapping("/user")
-//    public R<String> deleteUsers(@RequestBody List<Long> userIds){
-//        return this.userService.deleteUsers(userIds);
-//    }
-//
-//
+    /**
+     * 更新用户角色信息
+     * @param vo
+     * @return
+     */
+    @PutMapping("/user/roles")
+    public R<String> updateUserOwnRoles(@RequestBody UserOwnRoleReqVo vo){
+        return this.userService.updateUserOwnRoles(vo);
+    }
+
+    /**
+     * 批量删除用户信息
+     * delete请求可通过请求体携带数据
+     * @param userIds
+     * @return
+     */
+    @DeleteMapping("/user")
+    public R<String> deleteUsers(@RequestBody List<Long> userIds){
+        return this.userService.deleteUsers(userIds);
+    }
+
+
 //    /**
 //     * 根据用户id查询用户信息
 //     * @param id

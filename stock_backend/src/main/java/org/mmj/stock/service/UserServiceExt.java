@@ -1,15 +1,13 @@
 package org.mmj.stock.service;
 
 import org.mmj.stock.pojo.entity.SysUser;
-import org.mmj.stock.vo.req.LoginReqVo;
-import org.mmj.stock.vo.req.UserAddReqVo;
-import org.mmj.stock.vo.req.UserEditReqVO;
-import org.mmj.stock.vo.req.UserPageReqVo;
+import org.mmj.stock.vo.req.*;
 import org.mmj.stock.vo.resp.LoginRespVo;
 import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
 import org.mmj.stock.vo.resp.UserOwnRoleRespVo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface UserServiceExt {
@@ -39,4 +37,17 @@ public interface UserServiceExt {
      * @return
      */
     R<UserOwnRoleRespVo> getUserOwnRole(Long userId);
+    /**
+     * 更新用户角色信息
+     * @param vo
+     * @return
+     */
+    R<String> updateUserOwnRoles(UserOwnRoleReqVo vo);
+
+    /**
+     * 批量删除角色
+     * @param userIds
+     * @return
+     */
+    R<String> deleteUsers(List<Long> userIds);
 }
