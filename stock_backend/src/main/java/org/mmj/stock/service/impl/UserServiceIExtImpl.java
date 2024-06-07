@@ -15,10 +15,7 @@ import org.mmj.stock.vo.req.UserAddReqVo;
 import org.mmj.stock.vo.req.UserEditReqVO;
 import org.mmj.stock.vo.req.UserOwnRoleReqVo;
 import org.mmj.stock.vo.req.UserPageReqVo;
-import org.mmj.stock.vo.resp.PageResult;
-import org.mmj.stock.vo.resp.R;
-import org.mmj.stock.vo.resp.ResponseCode;
-import org.mmj.stock.vo.resp.UserOwnRoleRespVo;
+import org.mmj.stock.vo.resp.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -181,5 +178,20 @@ public class UserServiceIExtImpl implements UserServiceExt {
             throw new BusinessException(ResponseCode.ERROR.getMessage());
         }
         return R.ok(ResponseCode.SUCCESS.getMessage());
+    }
+    /**
+     * 根据用户ID查询用户细腻
+     * @param id 用户id
+     * @return
+     */
+    @Override
+    public R<UserInfoRespVo> getUserInfo(Long id) {
+        if (id==null) {
+            return R.error(ResponseCode.DATA_ERROR.getMessage());
+        }
+        SysUser user = this.sysUserMapperExt.selectByPrimaryKey(id);
+        UserInfoRespVo userInfo = new UserInfoRespVo();
+        BeanUtils.copyProperties(user,userInfo);
+        return R.ok(userInfo);
     }
 }

@@ -2,10 +2,7 @@ package org.mmj.stock.service;
 
 import org.mmj.stock.pojo.entity.SysUser;
 import org.mmj.stock.vo.req.*;
-import org.mmj.stock.vo.resp.LoginRespVo;
-import org.mmj.stock.vo.resp.PageResult;
-import org.mmj.stock.vo.resp.R;
-import org.mmj.stock.vo.resp.UserOwnRoleRespVo;
+import org.mmj.stock.vo.resp.*;
 
 import java.util.List;
 import java.util.Map;
@@ -50,4 +47,6 @@ public interface UserServiceExt {
      * @return
      */
     R<String> deleteUsers(List<Long> userIds);
+
+    R<UserInfoRespVo> getUserInfo(Long id);
 }

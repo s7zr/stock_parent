@@ -86,15 +86,15 @@ public class UserControllerExt {
     }
 
 
-//    /**
-//     * 根据用户id查询用户信息
-//     * @param id
-//     * @return
-//     */
-//    @GetMapping("/user/info/{userId}")
-//    public R<UserInfoRespVo> getUserInfo(@PathVariable("userId") Long id){
-//        return userService.getUserInfo(id);
-//    }
-//
+    /**
+     * 根据用户id查询用户信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/user/info/{userId}")
+    public R<UserInfoRespVo> getUserInfo(@PathVariable("userId") Long id){
+        return userService.getUserInfo(id);
+    }
+
 
 }
