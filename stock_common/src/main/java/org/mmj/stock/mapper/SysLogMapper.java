@@ -1,6 +1,9 @@
 package org.mmj.stock.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.mmj.stock.pojo.entity.SysLog;
+
+import java.util.List;
 
 /**
 * @author mmj
@@ -21,5 +24,14 @@ public interface SysLogMapper {
     int updateByPrimaryKeySelective(SysLog record);
 
     int updateByPrimaryKey(SysLog record);
-
+    /**
+     * 多添加查询
+     * @param username 操作者账户名称
+     * @param operation 操作类型
+     * @param startTime 起始时间
+     * @param endTime 截止时间
+     * @return
+     */
+    List<SysLog> findByCondition(@Param("username") String username, @Param("operation") String operation,
+                                 @Param("startTime") String startTime, @Param("endTime") String endTime);
 }
