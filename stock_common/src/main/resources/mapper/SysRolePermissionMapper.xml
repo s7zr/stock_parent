@@ -35,6 +35,9 @@
         delete from sys_role_permission
         where  id = #{id,jdbcType=BIGINT} 
     </delete>
+    <delete id="deleteByRoleId">
+        DELETE FROM sys_role_permission WHERE role_id=#{roleId}
+    </delete>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.mmj.stock.pojo.entity.SysRolePermission" useGeneratedKeys="true">
         insert into sys_role_permission
         ( id,role_id,permission_id

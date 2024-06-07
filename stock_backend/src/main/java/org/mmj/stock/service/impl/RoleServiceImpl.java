@@ -10,6 +10,7 @@ import org.mmj.stock.pojo.entity.SysRolePermission;
 import org.mmj.stock.service.RoleService;
 import org.mmj.stock.utils.IdWorker;
 import org.mmj.stock.vo.req.RoleAddVo;
+import org.mmj.stock.vo.req.RoleUpdateVo;
 import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
 import org.mmj.stock.vo.resp.ResponseCode;
@@ -100,5 +101,36 @@ public class RoleServiceImpl implements RoleService {
         Set<String> permissionIds =this.sysRolePermissionMapper.getPermissionIdsByRoleId(roleId);
         permissionIds = permissionIds == null ? new HashSet<>() : permissionIds;
         return R.ok(permissionIds);
+    }
+
+    /**
+     * 更新角色信息，包含角色关联的权限信息
+     * @param vo
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public R<String> updateRoleWithPermissions(RoleUpdateVo vo) {
+        //包含三步：1.更新角色信息 2.删除当前角色关联的权限 3.批量插入关联的权限
+        //1.更新角色信息
+        SysRole role = SysRole.builder().id(vo.getId()).name(vo.getName()).updateTime(new Date())
+                .description(vo.getDescription()).build();
+        int updateCount = this.sysRoleMapper.updateByPrimaryKeySelective(role);
+        if (updateCount!=1) {
+            throw new BusinessException(ResponseCode.ERROR.getMessage());
+        }
+        //2.删除当前角色关联的权限信息
+        sysRolePermissionMapper.deleteByRoleId(vo.getId());
+        //3.插入当前角色权限信息
+        List<Long> permissionsIds = vo.getPermissionsIds();
+        if (!CollectionUtils.isEmpty(permissionsIds)) {
+            List<SysRolePermission> rps = permissionsIds.stream().map(permissionId -> {
+                SysRolePermission rp = SysRolePermission.builder().roleId(vo.getId()).permissionId(permissionId)
+                        .createTime(new Date()).id(idWorker.nextId()).build();
+                return rp;
+            }).collect(Collectors.toList());
+            this.sysRolePermissionMapper.addRolePermissionBatch(rps);
+        }
+        return R.ok(ResponseCode.SUCCESS.getMessage());
     }
 }

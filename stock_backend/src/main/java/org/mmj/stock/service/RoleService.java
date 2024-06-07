@@ -1,6 +1,7 @@
 package org.mmj.stock.service;
 
 import org.mmj.stock.vo.req.RoleAddVo;
+import org.mmj.stock.vo.req.RoleUpdateVo;
 import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
 import org.mmj.stock.vo.resp.RolePageReqVo;
@@ -34,4 +35,10 @@ public interface RoleService {
      * @return
      */
     R<Set<String>> getPermissionIdsByRoleId(Long roleId);
+    /**
+     * 更新角色信息，包含角色关联的权限信息
+     * @param vo
+     * @return
+     */
+    R<String> updateRoleWithPermissions(RoleUpdateVo vo);
 }

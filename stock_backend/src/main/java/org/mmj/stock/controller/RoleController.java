@@ -2,6 +2,7 @@ package org.mmj.stock.controller;
 
 import org.mmj.stock.service.RoleService;
 import org.mmj.stock.vo.req.RoleAddVo;
+import org.mmj.stock.vo.req.RoleUpdateVo;
 import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
 import org.mmj.stock.vo.resp.RolePageReqVo;
@@ -47,5 +48,15 @@ public class RoleController {
     @GetMapping("/role/{roleId}")
     public R<Set<String>>  getPermissionIdsByRoleId(@PathVariable("roleId") Long roleId){
         return roleService.getPermissionIdsByRoleId(roleId);
+    }
+
+    /**
+     * 更新角色信息，包含角色关联的权限信息
+     * @param vo
+     * @return
+     */
+    @PutMapping("/role")
+    public R<String> updateRoleWithPermissions(@RequestBody RoleUpdateVo vo){
+        return roleService.updateRoleWithPermissions(vo);
     }
 }
