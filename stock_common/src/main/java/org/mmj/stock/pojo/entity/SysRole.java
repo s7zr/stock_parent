@@ -2,6 +2,8 @@ package org.mmj.stock.pojo.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -9,6 +11,7 @@ import lombok.Data;
  * @TableName sys_role
  */
 @Data
+@Builder
 public class SysRole implements Serializable {
     /**
      * 主键

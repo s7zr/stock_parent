@@ -1,6 +1,7 @@
 package org.mmj.stock.controller;
 
 import org.mmj.stock.service.RoleService;
+import org.mmj.stock.vo.req.RoleAddVo;
 import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
 import org.mmj.stock.vo.resp.RolePageReqVo;
@@ -28,5 +29,14 @@ public class RoleController {
     @PostMapping("/roles")
     public R<PageResult> queryPageRole(@RequestBody RolePageReqVo vo){
         return roleService.queryPageRole(vo);
+    }
+    /**
+     * 添加角色和角色关联权限
+     * @param vo
+     * @return
+     */
+    @PostMapping("/role")
+    public R<String> addRoleWithPermissions(@RequestBody RoleAddVo vo){
+        return roleService.addRoleWithPermissions(vo);
     }
 }

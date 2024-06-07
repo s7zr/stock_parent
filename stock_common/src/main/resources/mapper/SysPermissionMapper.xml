@@ -36,6 +36,9 @@
         from sys_permission
         where  id = #{id,jdbcType=BIGINT} 
     </select>
+    <select id="findAll" resultType="org.mmj.stock.pojo.entity.SysPermission">
+        select <include refid="Base_Column_List"/> from sys_permission where deleted=1
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from sys_permission

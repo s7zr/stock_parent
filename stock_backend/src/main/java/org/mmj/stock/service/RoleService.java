@@ -1,5 +1,6 @@
 package org.mmj.stock.service;
 
+import org.mmj.stock.vo.req.RoleAddVo;
 import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
 import org.mmj.stock.vo.resp.RolePageReqVo;
@@ -18,4 +19,10 @@ public interface RoleService {
      * @return
      */
     public R<PageResult> queryPageRole(RolePageReqVo vo);
+    /**
+     * 添加角色和角色关联权限
+     * @param vo
+     * @return
+     */
+    R<String> addRoleWithPermissions(RoleAddVo vo);
 }

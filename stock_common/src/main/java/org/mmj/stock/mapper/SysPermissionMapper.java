@@ -2,6 +2,8 @@ package org.mmj.stock.mapper;
 
 import org.mmj.stock.pojo.entity.SysPermission;
 
+import java.util.List;
+
 /**
 * @author mmj
 * @description 针对表【sys_permission(权限表（菜单）)】的数据库操作Mapper
@@ -21,5 +23,9 @@ public interface SysPermissionMapper {
     int updateByPrimaryKeySelective(SysPermission record);
 
     int updateByPrimaryKey(SysPermission record);
-
+    /**
+     * 获取所有权限集合
+     * @return
+     */
+    List<SysPermission> findAll();
 }

@@ -1,6 +1,9 @@
 package org.mmj.stock.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.mmj.stock.pojo.entity.SysRolePermission;
+
+import java.util.List;
 
 /**
 * @author mmj
@@ -21,5 +24,10 @@ public interface SysRolePermissionMapper {
     int updateByPrimaryKeySelective(SysRolePermission record);
 
     int updateByPrimaryKey(SysRolePermission record);
-
+    /**
+     * 批量添加用户角色集合
+     * @param rps
+     * @return
+     */
+    int addRolePermissionBatch(@Param("rps") List<SysRolePermission> rps);
 }
