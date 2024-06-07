@@ -2,13 +2,12 @@ package org.mmj.stock.controller;
 
 import org.mmj.stock.pojo.entity.SysPermission;
 import org.mmj.stock.service.PermissionService;
+import org.mmj.stock.vo.req.PermissionAddVo;
 import org.mmj.stock.vo.resp.PermissionRespNodeTreeVo;
 import org.mmj.stock.vo.resp.PermissionRespNodeVo;
 import org.mmj.stock.vo.resp.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -45,5 +44,15 @@ public class PermissionContrlller {
     @GetMapping("/permissions/tree")
     public R<List<PermissionRespNodeTreeVo>>  getAllPermissionTreeExBt(){
         return permissionService.getAllPermissionTreeExBt();
+    }
+
+    /**
+     * 权限添加按钮
+     * @param vo
+     * @return
+     */
+    @PostMapping("/permission")
+    public R<String> addPermission(@RequestBody PermissionAddVo vo){
+        return permissionService.addPermission(vo);
     }
 }
