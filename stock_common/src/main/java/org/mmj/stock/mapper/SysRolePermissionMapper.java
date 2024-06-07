@@ -43,4 +43,10 @@ public interface SysRolePermissionMapper {
      * @return
      */
     void deleteByRoleId(@Param("roleId") Long id);
+    /**
+     * 根据权限id删除关联的角色信息
+     * @param permissionId
+     * @return
+     */
+    int deleteByPermissionId(@Param("permissionId") Long permissionId);
 }

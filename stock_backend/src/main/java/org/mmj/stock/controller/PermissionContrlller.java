@@ -3,6 +3,7 @@ package org.mmj.stock.controller;
 import org.mmj.stock.pojo.entity.SysPermission;
 import org.mmj.stock.service.PermissionService;
 import org.mmj.stock.vo.req.PermissionAddVo;
+import org.mmj.stock.vo.req.PermissionUpdateVo;
 import org.mmj.stock.vo.resp.PermissionRespNodeTreeVo;
 import org.mmj.stock.vo.resp.PermissionRespNodeVo;
 import org.mmj.stock.vo.resp.R;
@@ -54,5 +55,25 @@ public class PermissionContrlller {
     @PostMapping("/permission")
     public R<String> addPermission(@RequestBody PermissionAddVo vo){
         return permissionService.addPermission(vo);
+    }
+
+    /**
+     * 更新权限
+     * @param vo
+     * @return
+     */
+    @PutMapping("/permission")
+    public R<String> updatePermission(@RequestBody PermissionUpdateVo vo){
+        return permissionService.updatePermission(vo);
+    }
+
+    /**
+     * 删除权限
+     * @param permissionId
+     * @return
+     */
+    @DeleteMapping("/permission/{permissionId}")
+    public R<String> removePermission(@PathVariable("permissionId") Long permissionId){
+        return permissionService.removePermission(permissionId);
     }
 }

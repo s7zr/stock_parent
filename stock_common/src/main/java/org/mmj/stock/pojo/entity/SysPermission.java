@@ -5,13 +5,19 @@ import java.util.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 权限表（菜单）
  * @TableName sys_permission
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SysPermission implements Serializable {
     /**
      * 主键

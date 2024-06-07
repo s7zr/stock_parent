@@ -2,6 +2,7 @@ package org.mmj.stock.service;
 
 import org.mmj.stock.pojo.entity.SysPermission;
 import org.mmj.stock.vo.req.PermissionAddVo;
+import org.mmj.stock.vo.req.PermissionUpdateVo;
 import org.mmj.stock.vo.resp.PermissionRespNodeTreeVo;
 import org.mmj.stock.vo.resp.PermissionRespNodeVo;
 import org.mmj.stock.vo.resp.R;
@@ -43,4 +44,16 @@ public interface PermissionService {
      * @return
      */
     R<String> addPermission(PermissionAddVo vo);
+    /**
+     * 更新权限
+     * @param vo
+     * @return
+     */
+    R<String> updatePermission(PermissionUpdateVo vo);
+    /**
+     * 根据权限id删除权限操作（逻辑删除）
+     * @param permissionId
+     * @return
+     */
+    R<String> removePermission(Long permissionId);
 }

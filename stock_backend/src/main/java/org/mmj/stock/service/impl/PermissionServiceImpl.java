@@ -4,10 +4,12 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.mmj.stock.exception.BusinessException;
 import org.mmj.stock.mapper.SysPermissionMapper;
+import org.mmj.stock.mapper.SysRolePermissionMapper;
 import org.mmj.stock.pojo.entity.SysPermission;
 import org.mmj.stock.service.PermissionService;
 import org.mmj.stock.utils.IdWorker;
 import org.mmj.stock.vo.req.PermissionAddVo;
+import org.mmj.stock.vo.req.PermissionUpdateVo;
 import org.mmj.stock.vo.resp.PermissionRespNodeTreeVo;
 import org.mmj.stock.vo.resp.PermissionRespNodeVo;
 import org.mmj.stock.vo.resp.R;
@@ -32,6 +34,8 @@ public class PermissionServiceImpl implements PermissionService {
     private SysPermissionMapper sysPermissionMapper;
     @Autowired
     private IdWorker idWorker;
+    @Autowired
+    private SysRolePermissionMapper sysRolePermissionMapper;
     @Override
     public R<List<PermissionRespNodeVo>> selectAllTree() {
         //获取所有权限信息
@@ -138,6 +142,46 @@ public class PermissionServiceImpl implements PermissionService {
         }
         return R.ok(ResponseCode.SUCCESS.getMessage());
     }
+    /**
+     * 更新权限
+     * @param vo
+     * @return
+     */
+    @Override
+    public R<String> updatePermission(PermissionUpdateVo vo) {
+        //检查当前提交数据是否合法,如果不合法，则抛出异常
+        SysPermission permission = new SysPermission();
+        BeanUtils.copyProperties(vo,permission);
+        this.checkPermissionForm(permission);
+        //TODO 如果再更新时，父级已被修改，则排除异常
+        permission.setStatus(1);
+        permission.setUpdateTime(new Date());
+        permission.setDeleted(1);
+        int count = this.sysPermissionMapper.updateByPrimaryKeySelective(permission);
+        if (count!=1) {
+            throw new BusinessException(ResponseCode.ERROR.getMessage());
+        }
+        return R.ok(ResponseCode.SUCCESS.getMessage());
+    }
+
+    @Override
+    public R<String> removePermission(Long permissionId) {
+        //1.判断当前角色是否有角色自己，有则不能删除
+        int count =this.sysPermissionMapper.findChildrenCountByParentId(permissionId);
+        if (count>0) {
+            throw new BusinessException(ResponseCode.ROLE_PERMISSION_RELATION.getMessage());
+        }
+        //2.删除角色关联权限的信息
+        this.sysRolePermissionMapper.deleteByPermissionId(permissionId);
+        //3.更新权限状态为已删除
+        SysPermission permission = SysPermission.builder().id(permissionId).deleted(0).updateTime(new Date()).build();
+        int updateCount = this.sysPermissionMapper.updateByPrimaryKeySelective(permission);
+        if (updateCount!=1) {
+            throw new BusinessException(ResponseCode.ERROR.getMessage());
+        }
+        return R.ok(ResponseCode.SUCCESS.getMessage());
+    }
+
     /**
      * 检查添加或者更新的权限提交表单是否合法，如果不合法，则直接抛出异常
      * 检查规则：目录的父目录等级必须为0或者其他目录（等级为1）

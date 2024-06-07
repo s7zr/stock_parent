@@ -1,5 +1,6 @@
 package org.mmj.stock.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.mmj.stock.pojo.entity.SysPermission;
 
 import java.util.List;
@@ -28,4 +29,10 @@ public interface SysPermissionMapper {
      * @return
      */
     List<SysPermission> findAll();
+    /**
+     * 根据权限父类id查询对应子集权限
+     * @param permissionId
+     * @return
+     */
+    int findChildrenCountByParentId(@Param("permissionId") Long permissionId);
 }
