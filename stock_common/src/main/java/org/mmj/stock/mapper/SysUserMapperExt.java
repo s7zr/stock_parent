@@ -36,4 +36,10 @@ public interface SysUserMapperExt {
      * @return
      */
     List<UserQueryDomain> pageUsers(@Param("userName") String username, @Param("nickName") String nickName, @Param("startTime") String startTime, @Param("endTime") String endTime);
+    /**
+     * 根据账户名称查询账户信息1
+     * @param username 账户名称
+     * @return
+     */
+    SysUser findUserByUserName(String username);
 }

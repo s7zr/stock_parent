@@ -32,15 +32,15 @@ public class UserControllerExt {
         return this.userService.pageUsers(userPageReqVo);
     }
 
-//    /**
-//     * 添加用户信息
-//     * @param vo
-//     * @return
-//     */
-//    @PostMapping("/user")
-//    public R<String> addUser(@RequestBody UserAddReqVo vo){
-//        return this.userService.addUser(vo);
-//    }
+    /**
+     * 添加用户信息
+     * @param vo
+     * @return
+     */
+    @PostMapping("/user")
+    public R<String> addUser(@RequestBody UserAddReqVo vo){
+        return this.userService.addUser(vo);
+    }
 //
 //    /**
 //     * 更新用户信息
