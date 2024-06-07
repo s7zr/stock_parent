@@ -51,17 +51,17 @@ public class UserControllerExt {
     public R<String> updateUser(@RequestBody UserEditReqVO vo){
         return this.userService.updateUser(vo);
     }
-//
-//    /**
-//     * 获取用户具有的角色信息，以及所有角色信息
-//     * @param userId
-//     * @return
-//     */
-//    @GetMapping("/user/roles/{userId}")
-//    public R<UserOwnRoleRespVo> getUserOwnRole(@PathVariable("userId")Long userId){
-//        return this.userService.getUserOwnRole(userId);
-//    }
-//
+
+    /**
+     * 获取用户具有的角色信息，以及所有角色信息
+     * @param userId
+     * @return
+     */
+    @GetMapping("/user/roles/{userId}")
+    public R<UserOwnRoleRespVo> getUserOwnRole(@PathVariable("userId")Long userId){
+        return this.userService.getUserOwnRole(userId);
+    }
+
 //    /**
 //     * 更新用户角色信息
 //     * @param vo

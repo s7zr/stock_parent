@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mmj.stock.exception.BusinessException;
 import org.mmj.stock.mapper.*;
 import org.mmj.stock.pojo.domain.*;
+import org.mmj.stock.pojo.entity.SysRole;
 import org.mmj.stock.pojo.entity.SysUser;
 import org.mmj.stock.service.UserServiceExt;
 import org.mmj.stock.utils.IdWorker;
@@ -15,6 +16,7 @@ import org.mmj.stock.vo.req.UserPageReqVo;
 import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
 import org.mmj.stock.vo.resp.ResponseCode;
+import org.mmj.stock.vo.resp.UserOwnRoleRespVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +33,11 @@ public class UserServiceIExtImpl implements UserServiceExt {
     @Autowired
     private IdWorker idWorker;
 
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
+
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
     /**
@@ -102,5 +109,22 @@ public class UserServiceIExtImpl implements UserServiceExt {
             throw new BusinessException(ResponseCode.ERROR.getMessage());
         }
         return R.ok(ResponseCode.SUCCESS.getMessage());
+    }
+    /**
+     * 获取用户具有的角色信息，以及所有角色信息
+     * @param userId
+     * @return
+     */
+    @Override
+    public R<UserOwnRoleRespVo> getUserOwnRole(Long userId) {
+        //1.获取当前用户所拥有的角色id集合
+        List<Long> roleIds= this.sysUserRoleMapper.findRoleIdsByUserId(userId);
+        //2.获取所有角色信息
+        List<SysRole> roles= this.sysRoleMapper.findAll();
+        //3.封装数据
+        UserOwnRoleRespVo vo = new UserOwnRoleRespVo();
+        vo.setOwnRoleIds(roleIds);
+        vo.setAllRole(roles);
+        return R.ok(vo);
     }
 }

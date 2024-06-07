@@ -8,6 +8,7 @@ import org.mmj.stock.vo.req.UserPageReqVo;
 import org.mmj.stock.vo.resp.LoginRespVo;
 import org.mmj.stock.vo.resp.PageResult;
 import org.mmj.stock.vo.resp.R;
+import org.mmj.stock.vo.resp.UserOwnRoleRespVo;
 
 import java.util.Map;
 
@@ -32,4 +33,10 @@ public interface UserServiceExt {
      * @return
      */
     R<String> updateUser(UserEditReqVO vo);
+    /**
+     * 获取用户具有的角色信息，以及所有角色信息
+     * @param userId
+     * @return
+     */
+    R<UserOwnRoleRespVo> getUserOwnRole(Long userId);
 }

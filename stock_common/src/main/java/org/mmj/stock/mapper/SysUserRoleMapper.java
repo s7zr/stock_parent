@@ -2,6 +2,8 @@ package org.mmj.stock.mapper;
 
 import org.mmj.stock.pojo.entity.SysUserRole;
 
+import java.util.List;
+
 /**
 * @author mmj
 * @description 针对表【sys_user_role(用户角色表)】的数据库操作Mapper
@@ -22,4 +24,10 @@ public interface SysUserRoleMapper {
 
     int updateByPrimaryKey(SysUserRole record);
 
+    /**
+     * 根据用户id查询角色集合
+     * @param userId
+     * @return
+     */
+    List<Long> findRoleIdsByUserId(Long userId);
 }
