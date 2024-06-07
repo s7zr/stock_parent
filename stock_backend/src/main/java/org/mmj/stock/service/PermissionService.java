@@ -1,6 +1,7 @@
 package org.mmj.stock.service;
 
 import org.mmj.stock.pojo.entity.SysPermission;
+import org.mmj.stock.vo.resp.PermissionRespNodeTreeVo;
 import org.mmj.stock.vo.resp.PermissionRespNodeVo;
 import org.mmj.stock.vo.resp.R;
 
@@ -25,4 +26,14 @@ public interface PermissionService {
      * @return
      */
     List<PermissionRespNodeVo> getTree(List<SysPermission> permissions, long pid, boolean isOnlyMenuType);
+    /**
+     * 查询所有权限集合
+     * @return
+     */
+    R<List<SysPermission>> getAll();
+    /**
+     * 添加权限时，回显权限树
+     * @return
+     */
+    R<List<PermissionRespNodeTreeVo>> getAllPermissionTreeExBt();
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.mmj.stock.mapper.SysPermissionMapper;
 import org.mmj.stock.pojo.entity.SysPermission;
 import org.mmj.stock.service.PermissionService;
+import org.mmj.stock.vo.resp.PermissionRespNodeTreeVo;
 import org.mmj.stock.vo.resp.PermissionRespNodeVo;
 import org.mmj.stock.vo.resp.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,56 @@ public class PermissionServiceImpl implements PermissionService {
             }
         }
         return list;
+    }
+
+    /**
+     * 获取所有权限集合
+     * @return
+     */
+    @Override
+    public R<List<SysPermission>> getAll() {
+        List<SysPermission> all = this.sysPermissionMapper.findAll();
+        return R.ok(all);
+    }
+    /**
+     * 添加权限时，回显权限树,不查看按钮
+     * 保证构建的权限集合顺序与实际一致即可在页面顺序展示
+     * @return
+     */
+    @Override
+    public R<List<PermissionRespNodeTreeVo>> getAllPermissionTreeExBt() {
+        //获取所有权限集合
+        List<SysPermission> all = this.sysPermissionMapper.findAll();
+        //构建权限树集合
+        List<PermissionRespNodeTreeVo> result=new ArrayList<>();
+        //构架顶级菜单（默认选项）
+        PermissionRespNodeTreeVo root = new PermissionRespNodeTreeVo();
+        root.setId(0l);
+        root.setTitle("顶级菜单");
+        root.setLevel(0);
+        result.add(root);
+        result.addAll(getPermissionLevelTree(all,0l,1));
+        return R.ok(result);
+    }
+    /**
+     * 递归设置级别，用于权限列表 添加/编辑 所属菜单树结构数据
+     * @param permissions 权限集合
+     * @param parentId 父级id
+     * @param lavel 级别
+     * @return
+     */
+    private List<PermissionRespNodeTreeVo> getPermissionLevelTree(List<SysPermission> permissions, Long parentId, int lavel) {
+        List<PermissionRespNodeTreeVo> result=new ArrayList<>();
+        for (SysPermission permission : permissions) {
+            if (permission.getType().intValue()!=3 && permission.getPid().equals(parentId)) {
+                PermissionRespNodeTreeVo nodeTreeVo = new PermissionRespNodeTreeVo();
+                nodeTreeVo.setId(permission.getId());
+                nodeTreeVo.setTitle(permission.getTitle());
+                nodeTreeVo.setLevel(lavel);
+                result.add(nodeTreeVo);
+                result.addAll(getPermissionLevelTree(permissions,permission.getId(),lavel+1));
+            }
+        }
+        return result;
     }
 }

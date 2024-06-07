@@ -1,6 +1,8 @@
 package org.mmj.stock.controller;
 
+import org.mmj.stock.pojo.entity.SysPermission;
 import org.mmj.stock.service.PermissionService;
+import org.mmj.stock.vo.resp.PermissionRespNodeTreeVo;
 import org.mmj.stock.vo.resp.PermissionRespNodeVo;
 import org.mmj.stock.vo.resp.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +29,21 @@ public class PermissionContrlller {
     @GetMapping("/permissions/tree/all")
     public R<List<PermissionRespNodeVo>> getAllPermissionTree(){
         return permissionService.selectAllTree();
+    }
+    /**
+     * 查询所有权限集合
+     * @return
+     */
+    @GetMapping("/permissions")
+    public R<List<SysPermission>>  getAll(){
+        return permissionService.getAll();
+    }
+    /**
+     * 添加权限时回显权限树
+     * @return
+     */
+    @GetMapping("/permissions/tree")
+    public R<List<PermissionRespNodeTreeVo>>  getAllPermissionTreeExBt(){
+        return permissionService.getAllPermissionTreeExBt();
     }
 }
