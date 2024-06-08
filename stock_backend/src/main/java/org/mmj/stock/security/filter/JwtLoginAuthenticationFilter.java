@@ -1,104 +1,132 @@
-//package org.mmj.stock.security.filter;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.google.common.base.Strings;
-//import org.mmj.stock.constant.StockConstant;
-//import org.mmj.stock.vo.req.LoginReqVo;
-//import org.mmj.stock.vo.resp.R;
-//import org.mmj.stock.vo.resp.ResponseCode;
-//import org.apache.commons.lang3.StringUtils;
-//import org.springframework.beans.BeanUtils;
-//import org.springframework.data.redis.core.RedisTemplate;
-//import org.springframework.http.MediaType;
-//import org.springframework.security.authentication.AuthenticationServiceException;
-//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.AuthenticationException;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-//
-//import javax.servlet.FilterChain;
-//import javax.servlet.ServletException;
-//import javax.servlet.ServletInputStream;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-//import java.io.IOException;
-//import java.util.List;
-///**
-// * @author mmj
-// * @Description 认证过滤器，核心作用：认证用户信息，jwt的票据
-// * @create 2024-06-05 10:26
-// */
-//public class JwtLoginAuthenticationFilter extends AbstractAuthenticationProcessingFilter{
-//    private RedisTemplate redisTemplate;
-//
-//    /**
-//     * 通过setter方法注解redis模板对象
-//     * @param redisTemplate
-//     */
-//    public void setRedisTemplate(RedisTemplate redisTemplate) {
-//        this.redisTemplate = redisTemplate;
-//    }
-//
-//    /**
-//     * 通过构造器传入自定义的登录地址
-//     * @param loginUrl
-//     */
-//    public JwtLoginAuthenticationFilter(String loginUrl) {
-//        super(loginUrl);
-//    }
-//
-//    /**
-//     * 用户认证处理的方法
-//     * @param request
-//     * @param response
-//     * @return
-//     * @throws AuthenticationException
-//     * @throws IOException
-//     * @throws ServletException
-//     * 我们约定请求方式必须是post方式，且请求的数据时json格式
-//     *              约定请求是账户key：username  密码：password
-//     */
-//    @Override
-//    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-//        //判断请求方法必须是post提交，且提交的数据的内容必须是application/json格式的数据
-//        if (!request.getMethod().equals("POST") ||
-//                ! (request.getContentType().equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE) || request.getContentType().equalsIgnoreCase(MediaType.APPLICATION_JSON_UTF8_VALUE))) {
-//            throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
-//        }
-//        //获取请求参数
-//        //获取reqeust请求对象的发送过来的数据流
-//        ServletInputStream in = request.getInputStream();
-//        //将数据流中的数据反序列化成Map
-//        LoginReqVo vo = new ObjectMapper().readValue(in, LoginReqVo.class);
-//        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//        response.setCharacterEncoding("utf-8");
-//        //1.判断参数是否合法
-//        if (vo==null || StringUtils.isBlank(vo.getUsername())
-//                || StringUtils.isBlank(vo.getPassword())
-//                || StringUtils.isBlank(vo.getSessionId()) || StringUtils.isBlank(vo.getCode())) {
-//            R<Object> resp = R.error(ResponseCode.USERNAME_OR_PASSWORD_ERROR.getMessage());
-//            response.getWriter().write(new ObjectMapper().writeValueAsString(resp));
-//            return null;
-//        }
-//        //从程序执行的效率看，先进行校验码的校验，成本较低
-//        String rCheckCode =(String) redisTemplate.opsForValue().get(StockConstant.CHECK_PREFIX + vo.getSessionId());
-//        if (rCheckCode==null || ! rCheckCode.equalsIgnoreCase(vo.getCode())) {
-//            //响应验证码输入错误
-//            R<Object> resp = R.error(ResponseCode.CHECK_CODE_ERROR.getMessage());
-//            response.getWriter().write(new ObjectMapper().writeValueAsString(resp));
-//            return null;
-//        }
-//        String username = vo.getUsername();
-//        //username = (username != null) ? username : "";
-//        username = username.trim();
-//        String password = vo.getPassword();
-//        //password = (password != null) ? password : "";
-//        //将用户名和密码信息封装到认证票据对象下
-//        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
-//        // Allow subclasses to set the "details" property
-//        //setDetails(request, authRequest);
-//        //调用认证管理器认证指定的票据对象
-//        return this.getAuthenticationManager().authenticate(authRequest);
-//    }
-//
-//}
+package org.mmj.stock.security.filter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
+import org.mmj.stock.constant.StockConstant;
+import org.mmj.stock.security.user.LoginUserDetail;
+import org.mmj.stock.security.utils.JwtTokenUtil;
+import org.mmj.stock.vo.req.LoginReqVo;
+import org.mmj.stock.vo.resp.LoginRespVoExt;
+import org.mmj.stock.vo.resp.R;
+import org.mmj.stock.vo.resp.ResponseCode;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+/**
+ * @author mmj
+ * @Description 认证过滤器，核心作用：认证用户信息，jwt的票据
+ * @create 2024-06-05 10:26
+ */
+public class JwtLoginAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+    private RedisTemplate redisTemplate;
+    public static final String USERNAME_KEY = "username";
+    public static final String PASSWORD_KEY = "password";
+
+    public void setRedisTemplate(RedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
+    /**
+     * 自定义构造器，传入登录认证的url地址
+     * @param loginUrl
+     */
+    public JwtLoginAuthenticationFilter(String loginUrl) {
+        super(loginUrl);
+    }
+
+    /**
+     * 尝试去认证的方法
+     * @param request
+     * @param response
+     * @return
+     * @throws AuthenticationException
+     * @throws IOException
+     * @throws ServletException
+     */
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+        //请求必须是post请求
+        if (!request.getMethod().equalsIgnoreCase("POST") || ! (MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(request.getContentType()) || MediaType.APPLICATION_JSON_UTF8_VALUE.equalsIgnoreCase(request.getContentType())) ) {
+            throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
+        }
+        //获取post请求ajax传入的数据流
+        LoginReqVo reqVo = new ObjectMapper().readValue(request.getInputStream(), LoginReqVo.class);
+        //校验验证码是否正确
+        String rCheckCode =(String) redisTemplate.opsForValue().get(StockConstant.CHECK_PREFIX + reqVo.getSessionId());
+        if (rCheckCode==null || ! rCheckCode.equalsIgnoreCase(reqVo.getCode())) {
+            //响应验证码输入错
+            String error = new ObjectMapper().writeValueAsString(ResponseCode.CHECK_CODE_ERROR.getMessage());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(error);
+            return null;
+//            return R.error(ResponseCode.CHECK_CODE_ERROR.getMessage());
+        }
+        String username = reqVo.getUsername();
+        username = username != null ? username : "";
+        username = username.trim();
+        String password = reqVo.getPassword();
+        password = password != null ? password : "";
+        //组装认证的票据对象
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+        //交给认证管理器认证票据对象
+        return this.getAuthenticationManager().authenticate(authRequest);
+    }
+
+    /**
+     * 认证成功后执行的方法
+     * @param request
+     * @param response
+     * @param chain 过滤器链
+     * @param authResult 认证对象信息
+     * @throws IOException
+     * @throws ServletException
+     */
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        LoginUserDetail principal = (LoginUserDetail) authResult.getPrincipal();
+        String username = principal.getUsername();
+        Collection<GrantedAuthority> authorities = principal.getAuthorities();
+        //生成票据
+        String tokenStr = JwtTokenUtil.createToken(username, authorities.toString());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        //构建响应体实体对象
+        LoginRespVoExt respVoExt = new LoginRespVoExt();
+        BeanUtils.copyProperties(principal,respVoExt);
+        respVoExt.setAccessToken(tokenStr);
+        R<LoginRespVoExt> ok = R.ok(respVoExt);
+        response.getWriter().write(new ObjectMapper().writeValueAsString(ok));
+    }
+
+    /**
+     * 认证失败后执行的方法
+     * @param request
+     * @param response
+     * @param failed
+     * @throws IOException
+     * @throws ServletException
+     */
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        R<Object> error = R.error(ResponseCode.ERROR);
+        response.getWriter().write(new ObjectMapper().writeValueAsString(error));
+    }
+}

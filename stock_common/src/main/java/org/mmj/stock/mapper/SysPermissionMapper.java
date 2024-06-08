@@ -35,4 +35,11 @@ public interface SysPermissionMapper {
      * @return
      */
     int findChildrenCountByParentId(@Param("permissionId") Long permissionId);
+
+    /**
+     * 根据用户id查询用户信息
+     * @param userId
+     * @return
+     */
+    List<SysPermission> getPermissionByUserId(@Param("userId") Long userId);
 }

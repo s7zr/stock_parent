@@ -181,6 +181,15 @@ public class PermissionServiceImpl implements PermissionService {
         }
         return R.ok(ResponseCode.SUCCESS.getMessage());
     }
+    /**
+     * 根据用户id查询权限集合
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<SysPermission> getPermissionByUserId(Long userId) {
+        return sysPermissionMapper.getPermissionByUserId(userId);
+    }
 
     /**
      * 检查添加或者更新的权限提交表单是否合法，如果不合法，则直接抛出异常

@@ -1,5 +1,6 @@
 package org.mmj.stock.service;
 
+import org.apache.ibatis.annotations.Param;
 import org.mmj.stock.pojo.entity.SysPermission;
 import org.mmj.stock.vo.req.PermissionAddVo;
 import org.mmj.stock.vo.req.PermissionUpdateVo;
@@ -56,4 +57,10 @@ public interface PermissionService {
      * @return
      */
     R<String> removePermission(Long permissionId);
+    /**
+     * 根据用户id查询用户信息
+     * @param userId
+     * @return
+     */
+    List<SysPermission> getPermissionByUserId(@Param("userId") Long userId);
 }

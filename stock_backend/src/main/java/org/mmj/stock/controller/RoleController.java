@@ -1,5 +1,6 @@
 package org.mmj.stock.controller;
 
+import io.swagger.annotations.Api;
 import org.mmj.stock.service.RoleService;
 import org.mmj.stock.vo.req.RoleAddVo;
 import org.mmj.stock.vo.req.RoleUpdateVo;
@@ -16,6 +17,7 @@ import java.util.Set;
  * @Description
  * @create 2024-06-07 14:53
  */
+@Api(tags = "角色接口")
 @RestController
 @RequestMapping("/api")
 public class RoleController {

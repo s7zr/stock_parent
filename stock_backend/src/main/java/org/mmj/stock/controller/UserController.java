@@ -40,12 +40,12 @@ public class UserController {
      * @param vo
      * @return
      */
-    @ApiOperation("用户登录功能接口")
-    @PostMapping("/login")
-    public R<LoginRespVo> login(@RequestBody LoginReqVo vo){
-        R<LoginRespVo> r= this.userService.login(vo);
-        return r;
-    }
+//    @ApiOperation("用户登录功能接口")
+//    @PostMapping("/login")
+//    public R<LoginRespVo> login(@RequestBody LoginReqVo vo){
+//        R<LoginRespVo> r= this.userService.login(vo);
+//        return r;
+//    }
 
     /**
      * 生成登录校验码的访问接口
