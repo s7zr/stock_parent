@@ -2,8 +2,10 @@ package org.mmj.stock.service.impl;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.joda.time.DateTime;
 import org.mmj.stock.constant.ParseType;
+import org.mmj.stock.face.StockCacheFace;
 import org.mmj.stock.mapper.StockBusinessMapper;
 import org.mmj.stock.mapper.StockMarketIndexInfoMapper;
 import org.mmj.stock.pojo.entity.StockMarketIndexInfo;
@@ -64,6 +66,9 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
      * 必须保证httpEntity无状态，也就是后续不能再修改
      */
     private HttpEntity<Object> httpEntity;
+
+    @Autowired
+    private StockCacheFace stockCacheFace;
     @Override
     public void getInnerMarketInfo() {
         //1.定义采集的url接口
@@ -157,10 +162,12 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
 
     @Override
     public void getStockRtIndex() {
-        List<String> allCodes = stockBusinessMapper.getStockCodes();
-        System.out.println(allCodes);
-        //添加大盘的业务前缀
-        allCodes = allCodes.stream().map(code->code.startsWith("6")?"sh"+code:"sz"+code).collect(Collectors.toList());
+        //通过缓存增强
+//        List<String> allCodes = stockBusinessMapper.getStockCodes();
+//        System.out.println(allCodes);
+//        //添加大盘的业务前缀
+//        allCodes = allCodes.stream().map(code->code.startsWith("6")?"sh"+code:"sz"+code).collect(Collectors.toList());
+        List<String> allCodes = stockCacheFace.getAllStockCodeWithPrefix();
         //将大数据分批次采集
         //使用guava工具类，对list做切分
         long startTime = System.currentTimeMillis();

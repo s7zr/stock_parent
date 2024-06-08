@@ -19,7 +19,7 @@ spring:
       # 并发效率会 有所下降，如果需要可以通过配置 useUnfairLock 属性为 true 使用非公平锁。
       maxWait: 60000
   profiles:
-    active: stock, mq, xxljob, sharding
+    active: stock, mq, xxljob, sharding, cache
   main:
     allow-bean-definition-overriding: true # 配置允许容器中的bean资源被覆盖。
 # 配置mybatis
